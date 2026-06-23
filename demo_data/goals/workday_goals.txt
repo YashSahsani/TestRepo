@@ -1,0 +1,3 @@
+Goal: Improve developer productivity and release quality for AI-assisted engineering workflows.
+Goal: Increase cross-team visibility through clearer status reporting and source-backed updates.
+Goal: Reduce manual performance review preparation by preserving evidence continuously.

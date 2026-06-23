@@ -1,0 +1,4 @@
+Objective: Make AI-assisted delivery measurable and trustworthy.
+Key Result: Ship a working performance-review reporting prototype by the hackathon demo.
+Key Result: Connect at least two engineering evidence sources with links and snippets.
+Key Result: Generate date-range summaries that can be used directly in review preparation.

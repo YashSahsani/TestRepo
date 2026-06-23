@@ -1,0 +1,65 @@
+{
+  "github": [
+    {
+      "date": "2026-06-23",
+      "source": "github",
+      "kind": "commit",
+      "title": "Implement local OneNote cache prototype",
+      "timestamp": "2026-06-23T09:42:00-04:00",
+      "url": "https://github.example.com/org/perf-review/commit/abc123",
+      "snippet": "Added Markdown-backed cache pages to mirror OneNote notebook, section, and date page semantics.",
+      "project": "performance-review",
+      "tags": ["onenote", "cache", "demo"]
+    },
+    {
+      "date": "2026-06-23",
+      "source": "github",
+      "kind": "pull_request",
+      "title": "Wire range summaries to cached daily pages",
+      "timestamp": "2026-06-23T13:18:00-04:00",
+      "url": "https://github.example.com/org/perf-review/pull/18",
+      "snippet": "Range reports now reuse daily summaries and only fetch missing dates.",
+      "project": "performance-review",
+      "tags": ["date-range", "summary"]
+    }
+  ],
+  "ado": [
+    {
+      "date": "2026-06-23",
+      "source": "ado",
+      "kind": "work_item",
+      "title": "ADO 4908: Support goal and OKR aligned response mode",
+      "timestamp": "2026-06-23T11:05:00-04:00",
+      "url": "https://dev.azure.example.com/team/project/_workitems/edit/4908",
+      "snippet": "Completed acceptance criteria for response-only goal and OKR shaping without mutating cached daily notes.",
+      "project": "performance-review",
+      "tags": ["goals", "okr", "privacy"]
+    }
+  ],
+  "m365": [
+    {
+      "date": "2026-06-23",
+      "source": "m365",
+      "kind": "meeting_transcript",
+      "title": "Hackathon design review",
+      "timestamp": "2026-06-23T15:30:00-04:00",
+      "url": "https://teams.microsoft.example.com/meetings/123",
+      "snippet": "Aligned on demo flow: daily report, date range report, and evidence search from cached OneNote pages.",
+      "people": ["Alex", "Sam"],
+      "project": "performance-review",
+      "tags": ["demo", "design-review"]
+    },
+    {
+      "date": "2026-06-23",
+      "source": "m365",
+      "kind": "teams_message",
+      "title": "Shared video demo outline",
+      "timestamp": "2026-06-23T16:12:00-04:00",
+      "url": "https://teams.microsoft.example.com/l/message/456",
+      "snippet": "Posted the planned video script with cache lookup, live fetch fallback, and OKR alignment scenes.",
+      "people": ["Alex"],
+      "project": "performance-review",
+      "tags": ["demo", "communication"]
+    }
+  ]
+}

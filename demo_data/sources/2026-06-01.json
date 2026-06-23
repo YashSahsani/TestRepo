@@ -1,0 +1,28 @@
+{
+  "github": [
+    {
+      "date": "2026-06-01",
+      "source": "github",
+      "kind": "pull_request",
+      "title": "Drafted normalized evidence schema",
+      "timestamp": "2026-06-01T10:15:00-04:00",
+      "url": "https://github.example.com/org/perf-review/pull/12",
+      "snippet": "Defined a source-neutral evidence contract for commits, work items, Teams messages, and transcripts.",
+      "project": "performance-review",
+      "tags": ["schema", "evidence", "prototype"]
+    }
+  ],
+  "ado": [
+    {
+      "date": "2026-06-01",
+      "source": "ado",
+      "kind": "work_item",
+      "title": "ADO 4821: Capture daily evidence from connected systems",
+      "timestamp": "2026-06-01T14:35:00-04:00",
+      "url": "https://dev.azure.example.com/team/project/_workitems/edit/4821",
+      "snippet": "Moved the work item to Active and added implementation notes for daily backfill.",
+      "project": "performance-review",
+      "tags": ["backfill", "ado"]
+    }
+  ]
+}
