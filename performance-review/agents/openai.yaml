@@ -1,4 +1,4 @@
 interface:
   display_name: "Performance Review"
-  short_description: "Summarize work evidence into review reports"
-  default_prompt: "Use $performance-review to summarize my work for today or a date range."
+  short_description: "Summarize GitHub MCP work evidence into review reports"
+  default_prompt: "Use $performance-review with GitHub MCP to summarize my work for today or a date range."

@@ -1,20 +1,20 @@
 ---
 name: performance-review
-description: Summarize personal work evidence from Azure DevOps, Microsoft 365, GitHub, Workday goals, and OKR text into daily, single-date, date-range, and performance-review reports. Use when a user asks for today's work summary, a work report for a date or date range, performance review evidence, goal/OKR-aligned accomplishments, OneNote-backed daily reports, or source-linked references to prior work.
+description: Summarize personal work evidence from GitHub MCP, Azure DevOps, Microsoft 365, Workday goals, and OKR text into daily, single-date, date-range, and performance-review reports. Use when a user asks for today's work summary, a work report for a date or date range, GitHub-backed performance evidence, commits/PRs/issues/reviews over days, goal/OKR-aligned accomplishments, OneNote-backed daily reports, source-linked references to prior work, or setup guidance for GitHub MCP/SSO for performance-review workflows.
 ---
 
 # Performance Review
 
 ## Overview
 
-Use this skill to produce evidence-backed work summaries from connected systems and cached daily summaries. Prefer raw source links and snippets over unsupported claims, and separate durable daily notes from response-only goal/OKR tailoring.
+Use this skill to produce evidence-backed work summaries from connected systems and cached daily summaries. Prefer GitHub MCP for live GitHub evidence when available. Prefer raw source links and snippets over unsupported claims, and separate durable daily notes from response-only goal/OKR tailoring.
 
 ## Workflow
 
 1. Ask the user whether they want `daily`, `single date`, or `date range` if the request does not already specify it.
 2. Resolve dates using the user's timezone. For daily reports, use the current local date.
 3. Check the OneNote daily summary cache before querying live systems.
-4. Fetch missing daily evidence from available connectors: Azure DevOps, Microsoft 365, GitHub, and Workday goals when requested.
+4. Fetch missing daily evidence from available connectors. Use GitHub MCP first for GitHub commits, PRs, reviews, comments, issues, and workflow activity. Use Azure DevOps, Microsoft 365, and Workday goals when available or requested.
 5. Normalize every source item into the evidence schema in `references/evidence-schema.md`.
 6. Create or update one durable OneNote page per date. Do not store response-only goal/OKR interpretations in OneNote unless the user explicitly asks.
 7. Return a concise answer with accomplishments, source evidence, blockers, collaboration, and suggested performance-review bullets.
@@ -53,10 +53,21 @@ Goals and OKRs are optional response filters:
 
 ## Source Priorities
 
-- GitHub: commits, pull requests, reviews, comments, issues, merged work, and links.
+- GitHub MCP: commits, pull requests, reviews, comments, issues, merged work, workflow runs, code/security findings when relevant, repository names, authorship, timestamps, and links.
 - Azure DevOps: work items, PRs if hosted there, commits, build/release activity, comments, state changes, and links.
 - Microsoft 365: Teams messages, meeting transcripts, SharePoint/OneDrive document activity, and OneNote cache pages.
 - Workday: goals and review period context only; avoid storing private HR detail in daily OneNote pages unless explicitly requested.
+
+## GitHub MCP Day Workflow
+
+For day and date-range requests backed by GitHub:
+
+1. Confirm the target GitHub account, organization, and repositories when the request does not make them clear.
+2. Verify GitHub MCP auth and organization SSO access before fetching private organization data.
+3. For each local date, collect authored commits, PRs opened/updated/merged, reviews submitted, issue or PR comments, assigned or closed issues, and relevant workflow runs.
+4. Normalize every GitHub item into the evidence schema with `source="github"`, stable URL, repo name, timestamp, title, and a short snippet.
+5. Deduplicate related evidence. Prefer the merged PR as the main accomplishment and keep commits/reviews/comments as supporting evidence.
+6. Flag missing coverage explicitly when MCP auth, repository access, SSO authorization, or date filtering prevents complete evidence collection.
 
 ## Safety and Privacy
 
