@@ -1,13 +1,13 @@
 ---
 name: performance-review
-description: Summarize personal work evidence from GitHub MCP, Azure DevOps, Microsoft 365, Workday goals, and OKR text into daily, single-date, date-range, and performance-review reports. Use when a user asks for today's work summary, a work report for a date or date range, GitHub-backed performance evidence, commits/PRs/issues/reviews over days, goal/OKR-aligned accomplishments, OneNote-backed daily reports, source-linked references to prior work, or setup guidance for GitHub MCP/SSO for performance-review workflows.
+description: Summarize personal work evidence from GitHub MCP via LiteLLM/Claude, Claude.ai GitHub connectors, Azure DevOps, Microsoft 365, Workday goals, and OKR text into daily, single-date, date-range, and performance-review reports. Use when a user asks for today's work summary, a work report for a date or date range, GitHub-backed performance evidence, commits/PRs/issues/reviews over days, goal/OKR-aligned accomplishments, OneNote-backed daily reports, source-linked references to prior work, or setup guidance for GitHub MCP/SSO in LiteLLM, Claude, or Claude.ai workflows.
 ---
 
 # Performance Review
 
 ## Overview
 
-Use this skill to produce evidence-backed work summaries from connected systems and cached daily summaries. Prefer GitHub MCP for live GitHub evidence when available. Prefer raw source links and snippets over unsupported claims, and separate durable daily notes from response-only goal/OKR tailoring.
+Use this skill to produce evidence-backed work summaries from connected systems and cached daily summaries. Prefer remote GitHub MCP through LiteLLM/Claude for live GitHub evidence, or Claude.ai's GitHub connector when working inside Claude.ai. Prefer raw source links and snippets over unsupported claims, and separate durable daily notes from response-only goal/OKR tailoring.
 
 ## Workflow
 
@@ -63,11 +63,17 @@ Goals and OKRs are optional response filters:
 For day and date-range requests backed by GitHub:
 
 1. Confirm the target GitHub account, organization, and repositories when the request does not make them clear.
-2. Verify GitHub MCP auth and organization SSO access before fetching private organization data.
+2. Verify GitHub MCP auth and organization SSO access before fetching private organization data. For LiteLLM/Claude, use the remote HTTP MCP server and OAuth. For Claude.ai, use the connected GitHub integration.
 3. For each local date, collect authored commits, PRs opened/updated/merged, reviews submitted, issue or PR comments, assigned or closed issues, and relevant workflow runs.
 4. Normalize every GitHub item into the evidence schema with `source="github"`, stable URL, repo name, timestamp, title, and a short snippet.
 5. Deduplicate related evidence. Prefer the merged PR as the main accomplishment and keep commits/reviews/comments as supporting evidence.
 6. Flag missing coverage explicitly when MCP auth, repository access, SSO authorization, or date filtering prevents complete evidence collection.
+
+## Runtime Preference
+
+- LiteLLM + Claude: use remote GitHub MCP over HTTPS through LiteLLM. Do not require Docker Desktop.
+- Claude.ai: use Claude.ai's built-in GitHub connector if it is available for the user's plan/workspace. Claude.ai does not consume repository-local `.vscode/mcp.json` files.
+- Local stdio MCP or Docker: avoid unless the user explicitly asks for that runtime.
 
 ## Safety and Privacy
 
@@ -87,5 +93,5 @@ python3 -m performance_review.cli backfill --from 2026-01-01 --to 2026-06-23 --d
 ## References
 
 - Read `references/evidence-schema.md` before changing source normalization.
-- Read `references/mcp-integration.md` before wiring live MCP tools.
+- Read `references/mcp-integration.md` before wiring live MCP tools or advising on LiteLLM/Claude.ai setup.
 - Read `references/report-format.md` before changing summary output.

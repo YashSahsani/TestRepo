@@ -22,77 +22,64 @@ Azure DevOps:
 GitHub MCP:
 
 - Use GitHub's official MCP server for live GitHub context when available.
-- Prefer the remote GitHub MCP server with OAuth when the MCP host supports remote servers and OAuth.
-- Use the local Docker MCP server with a GitHub personal access token when the host does not support remote OAuth or when a local stdio server is required.
+- Prefer the remote GitHub MCP server with OAuth through LiteLLM when using Claude through LiteLLM.
+- Use Claude.ai's built-in GitHub connector when working directly in Claude.ai and the connector is available.
+- Do not require Docker Desktop for this workflow. Avoid local stdio/Docker MCP unless the user explicitly asks for that runtime.
 - Fetch authored commits, pull requests, reviews, issue comments, issue activity, merged PRs, and workflow runs for the target date.
 - Preserve repository names, authorship, timestamps, PR/commit/issue URLs, and workflow links.
 - Configure only the toolsets needed for review evidence: `context`, `repos`, `issues`, `pull_requests`, and optionally `actions`.
 
-## GitHub MCP Setup With SSO
+## GitHub MCP Setup With SSO For LiteLLM + Claude
 
-### Recommended remote OAuth setup
+Use this path when the user runs Claude through LiteLLM and does not want Docker Desktop.
 
-Use this when the MCP host supports remote MCP servers and browser OAuth.
-
-```json
-{
-  "servers": {
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
-    }
-  }
-}
+```yaml
+mcp_servers:
+  github_mcp:
+    url: "https://api.githubcopilot.com/mcp"
+    transport: "http"
+    auth_type: oauth2
 ```
 
-After adding the server, start the MCP host's auth flow and complete GitHub login in the browser. If the organization requires SSO, complete the organization SSO prompt before using tools against private org repositories.
+After adding the server, restart LiteLLM and complete the OAuth flow from the LiteLLM MCP server UI or the MCP-capable client. If the GitHub organization requires SSO, complete the organization SSO prompt before using tools against private org repositories.
 
-### Local Docker setup with SSO-authorized token
+For deployments that require explicit OAuth client credentials:
 
-Use this when the MCP host needs a local stdio server.
+```yaml
+mcp_servers:
+  github_mcp:
+    url: "https://api.githubcopilot.com/mcp"
+    transport: "http"
+    auth_type: oauth2
+    client_id: os.environ/GITHUB_OAUTH_CLIENT_ID
+    client_secret: os.environ/GITHUB_OAUTH_CLIENT_SECRET
+```
 
-1. Create a GitHub personal access token with the minimum scopes needed for the target repos. For private repository performance review work, start with `repo`; add `read:org` only when org/team context is needed.
-2. If the GitHub organization uses SSO, authorize the token for that organization in GitHub: Settings -> Developer settings -> Personal access tokens -> Configure SSO -> Authorize.
-3. Do not commit the token. Store it in the MCP host credential prompt, environment variable, or local secret store.
-4. Configure the local server:
+Use environment variables or the LiteLLM secret store for client credentials. Do not commit OAuth client secrets or access tokens.
 
-```json
-{
-  "inputs": [
-    {
-      "type": "promptString",
-      "id": "github_token",
-      "description": "GitHub Personal Access Token",
-      "password": true
-    }
-  ],
-  "servers": {
-    "github": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "-e",
-        "GITHUB_TOOLSETS",
-        "ghcr.io/github/github-mcp-server"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}",
-        "GITHUB_TOOLSETS": "context,repos,issues,pull_requests,actions"
-      }
-    }
-  }
-}
+## Claude.ai Setup
+
+Use Claude.ai's GitHub connector when available:
+
+1. Open Claude.ai settings.
+2. Connect GitHub from Connectors or Integrations.
+3. Complete GitHub login and any organization SSO prompt.
+4. Ask Claude.ai for the target repository and date range in performance-review format.
+
+Claude.ai does not use repository-local MCP config files. If the user needs the exact `performance-review` skill behavior in Claude.ai, paste or upload the skill instructions and tell Claude.ai to follow them while using the connected GitHub account.
+
+Example prompt:
+
+```text
+Using my connected GitHub account, summarize my work in OWNER/REPO from YYYY-MM-DD to YYYY-MM-DD in performance review format. Include source links, grouped daily accomplishments, blockers, collaboration, and review-ready bullets.
 ```
 
 ### SSO troubleshooting
 
-- `Resource protected by organization SAML enforcement`: authorize the token for the organization or re-run the OAuth flow and complete organization SSO.
+- `Resource protected by organization SAML enforcement`: re-run the OAuth flow and complete organization SSO.
 - `Repository not found`: confirm repo owner/name, private repo access, org membership, and SSO authorization.
-- `Bad credentials`: rotate the token or re-login through the MCP host.
+- `Bad credentials`: re-login through LiteLLM/Claude.ai or rotate credentials in the LiteLLM secret store.
+- No tools appear in Claude.ai: confirm the GitHub connector is enabled for the plan/workspace; Claude.ai may expose connectors differently than LiteLLM MCP.
 - Missing PRs or commits: check that the token has private repo access and that date filtering uses the user's local timezone.
 
 ## GitHub Evidence Collection For Days
